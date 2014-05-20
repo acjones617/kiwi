@@ -1,0 +1,65 @@
+
+<!doctype html>
+<html>
+<head>
+<title>Download Filename Controller</title>
+<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Yellowtail">
+<!-- <script type="text/javascript"></script> -->
+<script src="options.js"></script>
+<style>
+body {
+  background-color: rgb(253, 244, 177);
+}
+
+.container {
+  height: 520px;
+  width: 500px;
+  margin: auto;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  background-color: #5189A1;
+  border-radius: 20px;
+  color: white;
+  padding: 20px;
+}
+
+.options {
+  font-family: 'Helvetica', san-serif, serif;
+}
+
+input#email:invalid {
+  color: red;
+}
+
+/*input#email:invalid::before {
+  content: 'PUT A VALID EMAIL';
+
+}
+*/
+.options h1, h2, h3, h4, h5 {
+  text-align: center;
+  font-family: 'Yellowtail', cursive;
+  letter-spacing: 6px;
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="options">
+    <h1>Kiwi Runner</h1>
+    <form>
+      email: <input id='email' type="email" placeholder='Put your email here'/>
+      <input id="setEmail" type="submit">
+
+    </form>
+  </div>
+</div>
+
+
+</body>
+</html>

@@ -10,10 +10,13 @@
     "default_title": "Kiwi"
   },
 
+  "options_page": "options.html",
+
   "permissions": [
     "<all_urls>",
     "activeTab",
     "tts",
+    "storage",
     "tabs"
   ],
 
@@ -23,6 +26,8 @@
       "background.js"
     ]
   },
+
+  "content_security_policy": "script-src 'self' https://*.firebaseio.com/; object-src 'self'",
 
   "content_scripts": [
     {

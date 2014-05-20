@@ -22,40 +22,64 @@ jQuery.fn.getPath = function () {
     return path;
 };
 
+jQuery.fn.getTitle = function() {
+  return $('html').find('title').text();
+};
+
 $('*').index(this);
 
-var toggleBackground = function() {
-  $('body').toggle(function () {
-    $("body").css({'background-color': "gray"});
-  }, function () {
-      $("#user_button").css({'background-color': "inherit"});
-  });
+var toggleSelectMode = function() {
+  $('body').toggleClass('__kiwi');
+};
+var init = function() {
+  var css = '.__kiwi *:hover { border: 1px solid blue; }';
+  var head = document.head || document.getElementsByTagName('head')[0];
+  var style = document.createElement('style');
+  style.type = 'text/css';
+
+  if (style.styleSheet){
+    style.styleSheet.cssText = css;
+  } else {
+    style.appendChild(document.createTextNode(css));
+  }
+
+  head.appendChild(style);
 };
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+  toggleSelectMode();
   if (request.shibal) {
     var sel = window.getSelection();
     var selectedText = sel.toString();
-    var $el = $(window.getSelection().anchorNode.parentNode);
+    if(sel.type !== 'None') {
+      var $el = $(window.getSelection().anchorNode.parentNode);
 
-    // var index = $('*').index(this);
+      // var index = $('*').index(this);
 
-    // // Restore element.
-    // var $this = $('*').eq(index);
+      // // Restore element.
+      // var $this = $('*').eq(index);
 
-    if(sel) {
-      sendResponse({
-        user: 'sean',
-        path: $el.getPath(),
-        text: selectedText,
-        url: window.location.href
-      });
+      if(selectedText) {
+        chrome.storage.sync.get('__kiwi', function(result) {
+          var response = {
+            email: result.__kiwi,
+            title: $el.getTitle(),
+            path: $el.getPath(),
+            text: selectedText,
+            url: window.location.href
+          };
+          sendResponse(response);
+          toggleSelectMode();
+        });
+      }
+
     }
+    return true;
   }
     // sendResponse({farewell: "goodbye"});
 });
 
 
-
+init();
 
 // initContentScript();
