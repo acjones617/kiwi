@@ -31,6 +31,14 @@ $('*').index(this);
 var toggleSelectMode = function() {
   $('body').toggleClass('__kiwi');
 };
+
+var noticeUser = function() {
+  $('body').prepend('<div class="__kiwiSuccess" style="background-color: blue">YOU ADDED SOMETHING</div>');
+  setTimeout(function() {
+    $('.__kiwiSuccess').remove();
+  }, 3000);
+};
+
 var init = function() {
   var css = '.__kiwi *:hover { border: 1px solid blue; }';
   var head = document.head || document.getElementsByTagName('head')[0];
@@ -47,19 +55,13 @@ var init = function() {
 };
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-  toggleSelectMode();
+
   if (request.shibal) {
-    var sel = window.getSelection();
-    var selectedText = sel.toString();
-    if(sel.type !== 'None') {
-      var $el = $(window.getSelection().anchorNode.parentNode);
-
-      // var index = $('*').index(this);
-
-      // // Restore element.
-      // var $this = $('*').eq(index);
-
-      if(selectedText) {
+    toggleSelectMode();
+    $('body *').on('click', function(e) {
+      var selectedText = $(this).text();
+      var $el = $(this);
+      if(selectedText !== '') {
         chrome.storage.sync.get('__kiwi', function(result) {
           var response = {
             email: result.__kiwi,
@@ -70,16 +72,15 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
           };
           sendResponse(response);
           toggleSelectMode();
+          noticeUser();
         });
       }
+    });
 
-    }
     return true;
   }
-    // sendResponse({farewell: "goodbye"});
 });
 
 
 init();
 
-// initContentScript();
