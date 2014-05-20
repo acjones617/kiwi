@@ -1,15 +1,39 @@
 {
   "manifest_version": 2,
 
-  "name": "One-click Kittens",
-  "description": "This extension demonstrates a 'browser action' with kittens.",
-  "version": "1.0",
+  "name": "Kiwi",
+  "description": "Let kiwi track things for you",
+  "version": "0.1",
 
   "browser_action": {
     "default_icon": "icon.png",
-    "default_popup": "popup.html"
+    "default_title": "Kiwi"
   },
+
   "permissions": [
-    "https://secure.flickr.com/"
+    "<all_urls>",
+    "activeTab",
+    "tts",
+    "tabs"
+  ],
+
+  "background": {
+    "scripts": [
+      "firebase.js",
+      "background.js"
+    ]
+  },
+
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "all_frames": true,
+      "js": [
+        "bower_components/jquery/dist/jquery.js",
+        "content_script.js"
+      ]
+    }
   ]
 }
