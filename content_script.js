@@ -56,9 +56,9 @@ var init = function() {
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
+  toggleSelectMode();
   if (request.shibal) {
-    toggleSelectMode();
-    $('body *').on('click', function(e) {
+    $('body *').one('click', function(e) {
       var selectedText = $(this).text();
       var $el = $(this);
       if(selectedText !== '') {
@@ -71,11 +71,12 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
             url: window.location.href
           };
           sendResponse(response);
-          toggleSelectMode();
+          // $('body *').off('click', '*');
           noticeUser();
         });
       }
     });
+    // toggleSelectMode();
 
     return true;
   }
