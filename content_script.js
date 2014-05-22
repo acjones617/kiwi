@@ -26,10 +26,10 @@ jQuery.fn.getTitle = function() {
   return $('html').find('title').text();
 };
 
-$('*').index(this);
+$('*').index(this); //possibly delete
 
 var toggleSelectMode = function() {
-  $('body').toggleClass('__kiwi');
+  $('body').toggleClass('__kiwi'); //add class kiwi to just body tag
 };
 
 var noticeUser = function() {
@@ -46,7 +46,7 @@ var init = function() {
   style.type = 'text/css';
 
   if (style.styleSheet){
-    style.styleSheet.cssText = css;
+    style.styleSheet.cssText = css; //possibly delete
   } else {
     style.appendChild(document.createTextNode(css));
   }
@@ -58,7 +58,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
   toggleSelectMode();
   if (request.shibal) {
-    $('body *').one('click', function(e) {
+    $('body *').on('click', function(e) {
       var selectedText = $(this).text();
       var $el = $(this);
       if(selectedText !== '') {
