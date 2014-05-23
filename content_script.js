@@ -17,12 +17,16 @@ jQuery.fn.getPath = function () {
         var parent = node.parent();
         var siblings = parent.children(name);
 
-        if (siblings.length > 1) {
-          if(realNode.getAttribute('class') && addClass){
+        if(realNode.getAttribute('class') && 
+          addClass && 
+          realNode.getAttribute('class') !== '' &&
+          realNode.getAttribute('class') !== '__kiwi'){
             name+= '.' + realNode.getAttribute('class');
             console.log('added class: ', name);
             addClass = false;
-          }
+        }
+
+        if (siblings.length > 1) {
           name += ':eq(' + siblings.index(realNode) + ')';
         }
         if(name !== 'tbody') {
@@ -85,7 +89,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
           if(!triggered){
             triggered = true;
             $('.__kiwi').removeClass('__kiwi');
-            debugger;
             event.preventDefault();
             var selectedText = $(event.target).text();
             var $el = $(event.target);
