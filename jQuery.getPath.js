@@ -30,10 +30,10 @@ jQuery.fn.getPath = function () {
         if (siblings.length > 1) {
           name += ':eq(' + siblings.index(realNode) + ')';
         }
-        if(name !== 'tbody') {
-          path = name + (path ? '>' + path : '');
-          console.log('path: ', path);
-        }
+        
+        path = name + (path ? '>' + path : '');
+        console.log('path: ', path);
+
         node = parent;
     }
     debugger;
