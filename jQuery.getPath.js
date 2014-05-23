@@ -1,10 +1,3 @@
-if (typeof exports !== 'undefined') {
-  if (typeof module !== 'undefined' && module.exports) {
-    var jQuery = require('jQuery');
-    console.log('test');
-  }
-}
-
 jQuery.fn.getPath = function () {
     if (this.length != 1) throw 'Requires one element.';
     var path, node = this;
@@ -43,13 +36,6 @@ jQuery.fn.getPath = function () {
         }
         node = parent;
     }
-    debugger;
     console.log(path);
     return path;
 };
-
-if (typeof exports !== 'undefined') {
-  if (typeof module !== 'undefined' && module.exports) {
-    exports = module.exports = getPath;
-  }
-}
