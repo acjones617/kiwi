@@ -34,6 +34,11 @@ var turnParentsOff = function() {
 
 };
 
+var getTodayInString = function() {
+ var today = new Date();
+ return today.getFullYear() + '-' + today.getMonth() + '-' + today.getDate();
+};
+
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   var triggered = false;
 
@@ -56,8 +61,12 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
                   email: result.__kiwi,
                   title: $el.getTitle(),
                   path: $el.getPath(),
-                  text: selectedText,
-                  url: window.location.href
+                  url: window.location.href,
+                  values: [
+                    { 
+                      time: getTodayInString(),
+                      value: selectedText }
+                  ]
                 };
                 sendResponse(response);
                 noticeUser();
