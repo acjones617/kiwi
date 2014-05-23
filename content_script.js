@@ -56,30 +56,35 @@ var init = function() {
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
-  toggleSelectMode();
   if (request.shibal) {
-    $('body *').one('click', function(e) {
-      var selectedText = $(this).text();
-      var $el = $(this);
-      if(selectedText !== '') {
-        chrome.storage.sync.get('__kiwi', function(result) {
-          var response = {
-            email: result.__kiwi,
-            title: $el.getTitle(),
-            path: $el.getPath(),
-            text: selectedText,
-            url: window.location.href
-          };
-          sendResponse(response);
-          // $('body *').off('click', '*');
-          noticeUser();
-        });
-      }
-    });
-    // toggleSelectMode();
+    $('*').hover(function(event) { //mouse over stuff
+      $(event.target).addClass('__kiwi');
 
-    return true;
+      $('.__kiwi').on('click', function(event) {
+        $('.__kiwi').off('click');
+        // event.preventDefault();
+        var selectedText = $(event.target).text();
+        var $el = $(event.target);
+        if(selectedText !== '') {
+          chrome.storage.sync.get('__kiwi', function(result) {
+            var response = {
+              email: result.__kiwi,
+              title: $el.getTitle(),
+              path: $el.getPath(),
+              text: selectedText,
+              url: window.location.href
+            };
+            sendResponse(response);
+            noticeUser();
+          });
+        }
+      });
+    }, function(event) { //mouse out
+      $('.__kiwi').off('click');
+      $(event.target).removeClass('__kiwi');
+    });
   }
+  return true;
 });
 
 

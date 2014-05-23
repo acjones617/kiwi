@@ -37,6 +37,7 @@
       "all_frames": true,
       "js": [
         "bower_components/jquery/dist/jquery.js",
+        "bower_components/underscore/underscore.js",
         "content_script.js"
       ]
     }
