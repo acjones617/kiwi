@@ -54,7 +54,7 @@ var noticeUser = function() {
 };
 
 var init = function() {
-  var css = '.__kiwi *:hover { border: 1px solid blue; }';
+  var css = '.__kiwi:hover { border: 1px solid blue; }';
   var head = document.head || document.getElementsByTagName('head')[0];
   var style = document.createElement('style');
   style.type = 'text/css';
@@ -68,34 +68,48 @@ var init = function() {
   head.appendChild(style);
 };
 
+var turnParentsOff = function() {
+
+};
+
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+  var triggered = false;
 
-  toggleSelectMode();
   if (request.shibal) {
-    $('body *').on('click', function(e) {
-      console.log('clicked');
-      var selectedText = $(this).text();
-      var $el = $(this);
-      if(selectedText !== '') {
-        chrome.storage.sync.get('__kiwi', function(result) {
-          var response = {
-            email: result.__kiwi,
-            title: $el.getTitle(),
-            path: $el.getPath(),
-            text: selectedText,
-            url: window.location.href
-          };
-          debugger;
-          sendResponse(response);
-          // $('body *').off('click', '*');
-          noticeUser();
-        });
-      }
-    });
-    // toggleSelectMode();
+    $('*').hover(function(event) { //mouse over stuff
+      $('.__kiwi').removeClass('__kiwi');
+      $(event.target).addClass('__kiwi');
 
-    return true;
+
+        $(this).one('click', function(event) {
+          if(!triggered){
+            triggered = true;
+            $('.__kiwi').removeClass('__kiwi');
+            debugger;
+            event.preventDefault();
+            var selectedText = $(event.target).text();
+            var $el = $(event.target);
+            if(selectedText !== '') {
+              chrome.storage.sync.get('__kiwi', function(result) {
+                var response = {
+                  email: result.__kiwi,
+                  title: $el.getTitle(),
+                  path: $el.getPath(),
+                  text: selectedText,
+                  url: window.location.href
+                };
+                sendResponse(response);
+                noticeUser();
+              });
+            }
+          } // end if
+        });
+    }, function(event) { //mouse out
+      $('.__kiwi').off('click');
+      $(event.target).removeClass('__kiwi');
+    });
   }
+  return true;
 });
 
 
