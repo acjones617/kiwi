@@ -8,7 +8,6 @@ function initBackground() {
       // alert('sending message');
       // chrome.tabs.sendMessage(tab.id, );
       chrome.tabs.sendMessage(tab.id, { shibal: true }, function(response) {
-        debugger;
         db.push(response);
         console.log(response);
       });

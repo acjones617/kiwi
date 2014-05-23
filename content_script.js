@@ -1,24 +1,42 @@
 jQuery.fn.getPath = function () {
     if (this.length != 1) throw 'Requires one element.';
-
     var path, node = this;
-    while (node.length) {
-        var realNode = node[0], name = realNode.localName;
-        if (!name) break;
-        name = name.toLowerCase();
 
+    if(node[0].getAttribute('id')){ //return id only if it exists
+      var id = node[0].getAttribute('id');
+      return '#' + id;
+    }
+
+    var addClass = true; //to make sure class selector fires once at maximum
+
+    while (node) {
+        var realNode = node[0];
+        if (!realNode.localName) break; //something's wrong with the selected element
+
+        var name = realNode.localName.toLowerCase();
         var parent = node.parent();
-
         var siblings = parent.children(name);
+
+        if(realNode.getAttribute('class') && 
+          addClass && 
+          realNode.getAttribute('class') !== '' &&
+          realNode.getAttribute('class') !== '__kiwi'){
+            name+= '.' + realNode.getAttribute('class');
+            console.log('added class: ', name);
+            addClass = false;
+        }
+
         if (siblings.length > 1) {
-            name += ':eq(' + siblings.index(realNode) + ')';
+          name += ':eq(' + siblings.index(realNode) + ')';
         }
         if(name !== 'tbody') {
           path = name + (path ? '>' + path : '');
+          console.log('path: ', path);
         }
         node = parent;
     }
 
+    console.log(path);
     return path;
 };
 
@@ -26,10 +44,10 @@ jQuery.fn.getTitle = function() {
   return $('html').find('title').text();
 };
 
-$('*').index(this);
+$('*').index(this); //possibly delete
 
 var toggleSelectMode = function() {
-  $('body').toggleClass('__kiwi');
+  $('body').toggleClass('__kiwi'); //add class kiwi to just body tag
 };
 
 var noticeUser = function() {
@@ -46,7 +64,7 @@ var init = function() {
   style.type = 'text/css';
 
   if (style.styleSheet){
-    style.styleSheet.cssText = css;
+    style.styleSheet.cssText = css; //possibly delete
   } else {
     style.appendChild(document.createTextNode(css));
   }
@@ -71,7 +89,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
           if(!triggered){
             triggered = true;
             $('.__kiwi').removeClass('__kiwi');
-            debugger;
             event.preventDefault();
             var selectedText = $(event.target).text();
             var $el = $(event.target);
