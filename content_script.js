@@ -40,7 +40,7 @@ var noticeUser = function() {
 };
 
 var init = function() {
-  var css = '.__kiwi *:hover { border: 1px solid blue; }';
+  var css = '.__kiwi:hover { border: 1px solid blue; }';
   var head = document.head || document.getElementsByTagName('head')[0];
   var style = document.createElement('style');
   style.type = 'text/css';
