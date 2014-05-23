@@ -54,31 +54,42 @@ var init = function() {
   head.appendChild(style);
 };
 
+var turnParentsOff = function() {
+
+};
+
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+  var triggered = false;
 
   if (request.shibal) {
     $('*').hover(function(event) { //mouse over stuff
+      $('.__kiwi').removeClass('__kiwi');
       $(event.target).addClass('__kiwi');
 
-      $('.__kiwi').on('click', function(event) {
-        $('.__kiwi').off('click');
-        // event.preventDefault();
-        var selectedText = $(event.target).text();
-        var $el = $(event.target);
-        if(selectedText !== '') {
-          chrome.storage.sync.get('__kiwi', function(result) {
-            var response = {
-              email: result.__kiwi,
-              title: $el.getTitle(),
-              path: $el.getPath(),
-              text: selectedText,
-              url: window.location.href
-            };
-            sendResponse(response);
-            noticeUser();
-          });
-        }
-      });
+
+        $(this).one('click', function(event) {
+          if(!triggered){
+            triggered = true;
+            $('.__kiwi').removeClass('__kiwi');
+            debugger;
+            event.preventDefault();
+            var selectedText = $(event.target).text();
+            var $el = $(event.target);
+            if(selectedText !== '') {
+              chrome.storage.sync.get('__kiwi', function(result) {
+                var response = {
+                  email: result.__kiwi,
+                  title: $el.getTitle(),
+                  path: $el.getPath(),
+                  text: selectedText,
+                  url: window.location.href
+                };
+                sendResponse(response);
+                noticeUser();
+              });
+            }
+          } // end if
+        });
     }, function(event) { //mouse out
       $('.__kiwi').off('click');
       $(event.target).removeClass('__kiwi');
