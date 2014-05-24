@@ -27,9 +27,9 @@ jQuery.fn.getPath = function () {
             addClass = false;
         }
 
-        if (siblings.length > 1) {
-          name += ':eq(' + siblings.index(realNode) + ')';
-        }
+        // if (siblings.length > 1) {
+        //   name += ':eq(' + siblings.index(realNode) + ')';
+        // }
         
         path = name + (path ? '>' + path : '');
         console.log('path: ', path);
