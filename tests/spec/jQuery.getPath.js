@@ -20,7 +20,6 @@ describe('jQuery()', function () {
   it('does basic pathing', function () {
     var dom = $('<div></div>');
     var target = $('<div>Hello</div>');
-
     target.appendTo(dom);
     $('body').append(dom);
 
@@ -29,34 +28,47 @@ describe('jQuery()', function () {
     $('body').find(dom).remove();
   });
 
-  xit('does pathing with classes', function () {
-    var dom = $('<div class="not"><div class="fun bun hun">Hello</div></div>');
-    var target = $('<div></div>');
+  it('does pathing with classes', function () {
+    var dom = $('<div></div>');
+    var target = $('<div class="not"><div class="fun bun hun">Hello</div></div>');
+    target.appendTo(dom);
     $('body').append(dom);
-    $('.fun').append(target);
-
-    expect(target.getPath()).to.equal('html>body>div.not:eq(1)>div.fun.bun.hun:eq(1)');
+    
+    expect(target.getPath()).to.equal('html>body>div:eq(1)>div.not'); 
     expect($(target.getPath())).to.not.equal([]);
     $('body').find(dom).remove();
   });
 
-  xit('does pathing with ids', function() {
-    var dom = $('<div id="fun"><div>Hello</div></div>');
-    var target = $('<div></div>');
+  
+  it('does pathing with ids', function() {
+    var dom = $('<div></div>');
+    var target = $('<div id="fun"><div>Hello</div></div>');
+    target.appendTo(dom);
     $('body').append(dom);
-    $('#fun div').append(target);
 
-    expect(target.getPath()).to.equal('html>body>div#fun>div:eq(1)');
+    expect(target.getPath()).to.equal('#fun');
     expect($(target.getPath())).to.not.equal([]);
     $('body').find(dom).remove();
 
   });
-
-  xit('returns single path if target has id', function() {
-    var dom = $('<div><div id="fun">Hello</div></div>');
-    var target = $('<div></div>');
+  
+  it('returns single path if target has id', function() {
+    var dom = $('<div></div>');
+    var target = $('<div><div id="fun">Hello</div></div>');
+    target.appendTo(dom);
     $('body').append(dom);
-    $('#fun').append(target);
+
+    expect(target.getPath()).to.equal('html>body>div:eq(1)>div');
+    expect($(target.getPath())).to.not.equal([]);
+    $('body').find(dom).remove();
+
+  });
+//good till this one
+  it('does pathing with ids', function() {
+    var dom = $('<div></div>');
+    var target = $('<div id="fun" class="jin"><div class="fun bun hun">Hello</div></div>');
+    target.appendTo(dom);
+    $('body').append(dom);
 
     expect(target.getPath()).to.equal('#fun');
     expect($(target.getPath())).to.not.equal([]);
@@ -64,18 +76,28 @@ describe('jQuery()', function () {
 
   });
 
-  xit('does pathing with ids', function() {
-    var dom = $('<div id="fun" class="jin"><div class="fun bun hun">Hello</div></div>');
-    var target = $('<div></div>');
+  it('does pathing with siblings', function() {
+    var dom = $('<div></div><div></div>');
+    var target = $('<div class="div1"></div>');
+    target.appendTo(dom);
     $('body').append(dom);
-    $('.fun').append(target);
 
-    expect(target.getPath()).to.equal('html>body>div#fun.jin>div.fun.bun.hun:eq(1)');
+    expect(target.getPath()).to.equal('html>body>div:eq(2)>div.div1');
     expect($(target.getPath())).to.not.equal([]);
     $('body').find(dom).remove();
 
   });
- 
 
+  it('does pathing with embedded siblings', function() {
+    var dom = $('<div class="div1"> <div class="div2"> <div class="div3"> </div></div></div>');
+    var target = $('<div class="div4"> </div>');
+    target.appendTo(dom);
+    $('body').append(dom);
+
+    expect(target.getPath()).to.equal('html>body>div:eq(1)>div.div4');
+    expect($(target.getPath())).to.not.equal([]);
+    $('body').find(dom).remove();
+
+  });
   // Add more assertions here
 });
