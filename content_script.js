@@ -62,11 +62,9 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
                   title: $el.getTitle(),
                   path: $el.getPath(),
                   url: window.location.href,
-                  values: [
-                    { 
-                      time: getTodayInString(),
-                      value: selectedText }
-                  ]
+                  values: [{ 
+                      date: getTodayInString(),
+                      value: selectedText }]
                 };
                 sendResponse(response);
                 noticeUser();

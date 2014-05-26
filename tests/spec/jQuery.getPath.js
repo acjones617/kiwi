@@ -1,7 +1,6 @@
 /* global jQuery, describe, it, expect, should */
 
 describe('jQuery()', function () {
-  'use strict';
 
   // beforeEach(function() {
 
