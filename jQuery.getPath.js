@@ -32,10 +32,15 @@ jQuery.fn.getPath = function () {
         // }
         
         path = name + (path ? '>' + path : '');
-        console.log('path: ', path);
+        // console.log('path: ', path);
 
         node = parent;
     }
-    console.log(path);
+
+    if($(path) !== $(this)) {
+        var index = $(path).index($(this));
+        path += ':eq(' + index + ')';
+    }
+    // console.log(path);
     return path;
 };
