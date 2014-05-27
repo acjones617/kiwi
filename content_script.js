@@ -3,9 +3,21 @@ jQuery.fn.getTitle = function() {
 };
 
 var notifyUser = function() {
-  $('body').prepend('<div class="__kiwiSuccess" style="background-color: blue">YOU ADDED SOMETHING</div>');
+  $('body')
+    .prepend('<div class="__kiwiSuccess" style="' +
+      'background-color: #FAFF9A;' +
+      'position: fixed;' +
+      'z-index: 1000;' +
+      'color: black;' +
+      'font-family: Helvetica;' +
+      'height: 19px;' +
+      'width: 96%;' +
+      'padding: 10px 10px;' +
+      'margin: 10px 12px;' +
+      '"">Your item has been added for tracking</div>');
+  
   setTimeout(function() {
-    $('.__kiwiSuccess').remove();
+    $('.__kiwiSuccess').fadeOut('slow');
   }, 3000);
 };
 
@@ -76,8 +88,12 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if (request.createKiwi) {
     $('*').on('mouseenter', mouseEnterHandler);
     $('*').on('mouseleave', mouseLeaveHandler);
+    
+    // to allow user to get out of node-selection mode after 
+    // clicking on the extension by clicking escape key
     $('*').on('keyup', function(e) {
       if (e.keyCode === 27) {
+        $('.__kiwi').removeClass('__kiwi');
         $('*').off('mouseenter', mouseEnterHandler);
         $('*').off('click', clickHandler);
       }
