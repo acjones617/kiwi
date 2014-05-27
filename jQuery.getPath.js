@@ -36,6 +36,11 @@ jQuery.fn.getPath = function () {
 
         node = parent;
     }
+
+    if($(path) !== $(this)) {
+        var index = $(path).index($(this));
+        path += ':eq(' + index + ')';
+    }
     // console.log(path);
     return path;
 };
