@@ -2,13 +2,7 @@ jQuery.fn.getTitle = function() {
   return $('html').find('title').text();
 };
 
-$('*').index(this); //possibly delete
-
-var toggleSelectMode = function() {
-  $('body').toggleClass('__kiwi'); //add class kiwi to just body tag
-};
-
-var noticeUser = function() {
+var notifyUser = function() {
   $('body').prepend('<div class="__kiwiSuccess" style="background-color: blue">YOU ADDED SOMETHING</div>');
   setTimeout(function() {
     $('.__kiwiSuccess').remove();
@@ -30,10 +24,6 @@ var init = function() {
   head.appendChild(style);
 };
 
-var turnParentsOff = function() {
-
-};
-
 var getTodayInString = function() {
  var today = new Date();
  return today.getFullYear() + '-' + today.getMonth() + '-' + today.getDate();
@@ -42,39 +32,53 @@ var getTodayInString = function() {
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   var triggered = false;
 
-  if (request.shibal) {
-    $('*').hover(function(event) { //mouse over stuff
-      $('.__kiwi').removeClass('__kiwi');
-      $(event.target).addClass('__kiwi');
+  var mouseEnter = function(event) {
+    $('.__kiwi').removeClass('__kiwi');
+    $(event.target).addClass('__kiwi');
 
+    $(this).one('click', function(event) {
+      if(!triggered) {
+        triggered = true;
+        $('.__kiwi').removeClass('__kiwi');
+        event.preventDefault();
+        var selectedText = $(event.target).text();
+        var $el = $(event.target);
+        if(selectedText !== '') {
+          chrome.storage.sync.get('__kiwi', function(result) {
+            var response = {
+              email: result.__kiwi,
+              title: $el.getTitle(),
+              path: $el.getPath(),
+              url: window.location.href,
+              values: [{ 
+                  date: getTodayInString(),
+                  value: selectedText}]
+            };
+            
+            // remove the 'mouseenter' handler from all nodes so
+            // that no new nodes can be selected after user clicks one
+            $('*').off('mouseenter', mouseEnter);
+            
+            sendResponse(response);
+            notifyUser();
+          });
+        }
+      }
+    });
+  };
 
-        $(this).one('click', function(event) {
-          if(!triggered){
-            triggered = true;
-            $('.__kiwi').removeClass('__kiwi');
-            event.preventDefault();
-            var selectedText = $(event.target).text();
-            var $el = $(event.target);
-            if(selectedText !== '') {
-              chrome.storage.sync.get('__kiwi', function(result) {
-                var response = {
-                  email: result.__kiwi,
-                  title: $el.getTitle(),
-                  path: $el.getPath(),
-                  url: window.location.href,
-                  values: [{ 
-                      date: getTodayInString(),
-                      value: selectedText }]
-                };
-                sendResponse(response);
-                noticeUser();
-              });
-            }
-          } // end if
-        });
-    }, function(event) { //mouse out
-      $('.__kiwi').off('click');
-      $(event.target).removeClass('__kiwi');
+  var mouseLeave = function(event) {
+    $('.__kiwi').off('click');
+    $(event.target).removeClass('__kiwi');
+  };
+
+  if (request.createKiwi) {
+    $('*').on('mouseenter', mouseEnter);
+    $('*').on('mouseleave', mouseLeave);
+    $('*').on('keyup', function(e) {
+      if (e.keyCode === 27) {
+        $('*').off('mouseenter', mouseEnter);
+      }
     });
   }
   return true;
@@ -82,4 +86,3 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
 
 init();
-
