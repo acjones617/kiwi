@@ -23,7 +23,7 @@ jQuery.fn.getPath = function () {
           realNode.getAttribute('class') !== '__kiwi'){
             // name+= '.' + realNode.getAttribute('class');
             name += '.' + realNode.getAttribute('class').split(" ").join('.');
-            console.log('added class: ', name);
+            // console.log('added class: ', name);
             addClass = false;
         }
 
