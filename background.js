@@ -7,9 +7,10 @@ function initBackground() {
       // console.log('whuttt');
       // alert('sending message');
       // chrome.tabs.sendMessage(tab.id, );
-      chrome.tabs.sendMessage(tab.id, { shibal: true }, function(response) {
+      chrome.tabs.sendMessage(tab.id, { createKiwi: true }, function(response) {
+        console.log('Right before sending to DB: ', response);
+        console.log('Sending to DB:');
         db.push(response);
-        console.log(response);
       });
     }
   );
