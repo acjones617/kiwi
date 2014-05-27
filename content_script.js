@@ -2,7 +2,7 @@ jQuery.fn.getTitle = function() {
   return $('html').find('title').text();
 };
 
-var notifyUser = function() {
+var notifyUser = function(message) {
   $('body')
     .prepend('<div class="__kiwiSuccess" style="' +
       'background-color: #FAFF9A;' +
@@ -14,7 +14,7 @@ var notifyUser = function() {
       'width: 96%;' +
       'padding: 10px 10px;' +
       'margin: 10px 12px;' +
-      '"">Your item has been added for tracking</div>');
+      '">' + message + '</div>');
   
   setTimeout(function() {
     $('.__kiwiSuccess').fadeOut('slow');
@@ -55,9 +55,9 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       triggered = true;
       $('.__kiwi').removeClass('__kiwi');
       event.preventDefault();
-      var selectedText = $(event.target).text();
-      var $el = $(event.target);
-      if(selectedText !== '') {
+        var selectedText = $(event.target).text();
+        var $el = $(event.target);
+        if(selectedText !== '') {
         chrome.storage.sync.get('__kiwi', function(result) {
           var response = {
             email: result.__kiwi,
@@ -74,8 +74,10 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
           $('*').off('mouseenter', mouseEnterHandler);
 
           sendResponse(response);
-          notifyUser();
+          notifyUser('Your item has been added for tracking');
         });
+      } else {
+        notifyUser('Please selected an element with a trackable value.');
       }
     }
   };
