@@ -32,52 +32,54 @@ var getTodayInString = function() {
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   var triggered = false;
 
-  var mouseEnter = function(event) {
+  var mouseEnterHandler = function(event) {
     $('.__kiwi').removeClass('__kiwi');
     $(event.target).addClass('__kiwi');
-
-    $(this).one('click', function(event) {
-      if(!triggered) {
-        triggered = true;
-        $('.__kiwi').removeClass('__kiwi');
-        event.preventDefault();
-        var selectedText = $(event.target).text();
-        var $el = $(event.target);
-        if(selectedText !== '') {
-          chrome.storage.sync.get('__kiwi', function(result) {
-            var response = {
-              email: result.__kiwi,
-              title: $el.getTitle(),
-              path: $el.getPath(),
-              url: window.location.href,
-              values: [{ 
-                  date: getTodayInString(),
-                  value: selectedText}]
-            };
-            
-            // remove the 'mouseenter' handler from all nodes so
-            // that no new nodes can be selected after user clicks one
-            $('*').off('mouseenter', mouseEnter);
-            
-            sendResponse(response);
-            notifyUser();
-          });
-        }
-      }
-    });
+    $(this).one('click', clickHandler);
   };
 
-  var mouseLeave = function(event) {
-    $('.__kiwi').off('click');
+  var clickHandler = function(event) {
+    if(!triggered) {
+      triggered = true;
+      $('.__kiwi').removeClass('__kiwi');
+      event.preventDefault();
+      var selectedText = $(event.target).text();
+      var $el = $(event.target);
+      if(selectedText !== '') {
+        chrome.storage.sync.get('__kiwi', function(result) {
+          var response = {
+            email: result.__kiwi,
+            title: $el.getTitle(),
+            path: $el.getPath(),
+            url: window.location.href,
+            values: [{ 
+                date: getTodayInString(),
+                value: selectedText}]
+          };
+          
+          // remove the 'mouseenter' handler from all nodes so
+          // that no new nodes can be selected after user clicks one
+          $('*').off('mouseenter', mouseEnterHandler);
+
+          sendResponse(response);
+          notifyUser();
+        });
+      }
+    }
+  };
+
+  var mouseLeaveHandler = function(event) {
+    $('.__kiwi').off('click'); // TODO: revisit use of this line (if working and/or necessary)
     $(event.target).removeClass('__kiwi');
   };
 
   if (request.createKiwi) {
-    $('*').on('mouseenter', mouseEnter);
-    $('*').on('mouseleave', mouseLeave);
+    $('*').on('mouseenter', mouseEnterHandler);
+    $('*').on('mouseleave', mouseLeaveHandler);
     $('*').on('keyup', function(e) {
       if (e.keyCode === 27) {
-        $('*').off('mouseenter', mouseEnter);
+        $('*').off('mouseenter', mouseEnterHandler);
+        $('*').off('click', clickHandler);
       }
     });
   }
