@@ -42,6 +42,5 @@ jQuery.fn.getPath = function () {
         path += ':eq(' + index + ')';
     }
     // console.log(path);
-    debugger;
     return path;
 };
