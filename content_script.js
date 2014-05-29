@@ -60,8 +60,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         var $el = $(event.target);
         if(selectedText !== '') {
         chrome.storage.sync.get('__kiwi', function(result) {
+          // email: result.__kiwi,
           var response = {
-            email: result.__kiwi,
             title: $el.getTitle(),
             path: $el.getPath(),
             url: window.location.href,
@@ -101,6 +101,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         $('*').off('click', clickHandler);
       }
     });
+    return true;
   }
   return true;
 });
