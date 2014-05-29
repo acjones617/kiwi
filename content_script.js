@@ -43,6 +43,7 @@ var getTodayInString = function() {
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   var triggered = false;
+  notifyUser('Please select an element with numeric values for tracking.');
 
   var mouseEnterHandler = function(event) {
     $('.__kiwi').removeClass('__kiwi');
