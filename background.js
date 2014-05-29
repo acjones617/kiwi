@@ -60,7 +60,7 @@ function initBackground() {
             console.log(cookie.value);
             // CONTINUE FROM HERE: try getting the cookie stored in the background page
             // Another option might be trying to store the cookie in the content script
-            chrome.cookies.set({url: 'chrome-extension://piokfjnabjpdlpgollhhcpdnbdnhcifp/_generated_background_page.html', name:'firebaseSessionKey'});
+            chrome.cookies.set({url: 'chrome-extension://piokfjnabjpdlpgollhhcpdnbdnhcifp', name:'firebaseSessionKey', value: cookie.value});
           }
           else {
             console.log('Can\'t get cookie! Check the name!');
