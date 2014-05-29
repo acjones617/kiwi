@@ -61,7 +61,6 @@ var checkCookies = function(callback) {
 var pushKiwi = function(tab) {
   checkCookies(function(db) {
     chrome.tabs.sendMessage(tab.id, { createKiwi: true }, function(response) {
-      debugger;
       console.log('Right before sending to DB: ', response);
       console.log('Sending to DB:');
       db.push(response);
