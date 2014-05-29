@@ -1,10 +1,10 @@
-var isLoggedIn = function(login, addKiwi) {
+var isLoggedIn = function(login, addKiwi, tab) {
   chrome.cookies.get({
     url: 'http://localhost:9000/special',
     name: 'kiwiSpecial'
   }, function(cookie) {
     if(cookie) {
-      addKiwi();
+      addKiwi(tab);
     } else {
       login();
     }
@@ -44,21 +44,24 @@ var checkCookies = function(callback) {
           kiwiUid = cookies[i].value; 
         }
       }
-      var db = new Firebase('https://kiwidb.firebaseio.com/users/' + kiwiUid);
-      db.auth(kiwiSpecial, function(err, result) {
-        if (err) {
-          console.log('Login Failed. Error:', err);
-        } else {
-          callback();
-        }
-      });
+      if(kiwiUid) {
+        var db = new Firebase('https://kiwidb.firebaseio.com/users/' + kiwiUid + '/kiwis');
+        db.auth(kiwiSpecial, function(err, result) {
+          if (err) {
+            console.log('Login Failed. Error:', err);
+          } else {
+            callback(db);
+          }
+        });
+      }
     }
   );
 };
 
-var pushKiwi = function() {
-  checkCookies(function() {
+var pushKiwi = function(tab) {
+  checkCookies(function(db) {
     chrome.tabs.sendMessage(tab.id, { createKiwi: true }, function(response) {
+      debugger;
       console.log('Right before sending to DB: ', response);
       console.log('Sending to DB:');
       db.push(response);
@@ -68,7 +71,7 @@ var pushKiwi = function() {
 
 function initBackground() {
   chrome.browserAction.onClicked.addListener(function(tab) {
-    isLoggedIn(logIn, pushKiwi);
+    isLoggedIn(logIn, pushKiwi, tab);
   });
 }
 
