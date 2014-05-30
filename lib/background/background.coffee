@@ -1,7 +1,7 @@
 
 ###
 checks cookies before pushing
-@param  {[type]} message [message to be pushed to the db]
+param  {[type]} message [message to be pushed to the db]
 ###
 initBackground = ->
   chrome.browserAction.onClicked.addListener (tab) ->
@@ -54,7 +54,7 @@ checkCookies = (callback) ->
       db = new Firebase(configs.firebaseDbUrl + kiwiUid + configs.kiwisView)
       db.auth kiwiSpecial, (err, result) ->
         if err
-          console.log "Login Failed. Error:", err
+          do login
         else
           callback db
         return
