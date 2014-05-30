@@ -25,9 +25,8 @@
 
   "background": {
     "scripts": [
-      "firebase.js",
-      "configs.js",
-      "background.js"
+      "lib/firebase.js",
+      "dist/background.js"
     ]
   },
 
@@ -44,9 +43,7 @@
       "js": [
         "bower_components/jquery/dist/jquery.js",
         "bower_components/underscore/underscore.js",
-        "configs.js",
-        "jQuery.getPath.js",
-        "content_script.js"
+        "dist/content.js"
       ]
     }
   ]
