@@ -18,7 +18,7 @@ var notifyUser = function(message) {
   
   setTimeout(function() {
     $('.__kiwiSuccess').fadeOut('slow');
-  }, 3000);
+  }, configs.displayDelay);
 };
 
 var init = function() {
@@ -75,7 +75,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
           $('*').off('mouseenter', mouseEnterHandler);
 
           sendResponse(response);
-          notifyUser('Your item has been added for tracking');
+          notifyUser('Your item has been added for tracking. Check them out <a href='+ configs.url + configs.kiwisView +'>here</a>');
         });
       } else {
         notifyUser('Please selected an element with a trackable value.');
@@ -84,7 +84,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   };
 
   var mouseLeaveHandler = function(event) {
-    $('.__kiwi').off('click'); // TODO: revisit use of this line (if working and/or necessary)
+    $('.__kiwi').off('click');
     $(event.target).removeClass('__kiwi');
   };
 

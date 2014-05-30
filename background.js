@@ -1,6 +1,6 @@
 var isLoggedIn = function(login, addKiwi, tab) {
   chrome.cookies.get({
-    url: 'http://localhost:9000/special',
+    url: configs.url + configs.chromeLoginView,
     name: 'kiwiSpecial'
   }, function(cookie) {
     if(cookie) {
@@ -18,7 +18,7 @@ var logIn = function() {
   var top = (screen.height/2)-(h/2); 
 
   chrome.windows.create({
-    'url': 'http://localhost:9000/special', 
+    'url': configs.chromeLoginPage,
     'type': 'popup', 
     'width': w, 
     'height': h, 
@@ -32,7 +32,7 @@ var logIn = function() {
  * @param  {[type]} message [message to be pushed to the db]
  */
 var checkCookies = function(callback) {
-  chrome.cookies.getAll({url: 'http://localhost:9000/special'},
+  chrome.cookies.getAll({url: configs.chromeLoginPage },
     function (cookies) {
       var kiwiSpecial;
       var kiwiUid;
@@ -45,7 +45,7 @@ var checkCookies = function(callback) {
         }
       }
       if(kiwiUid) {
-        var db = new Firebase('https://kiwidb.firebaseio.com/users/' + kiwiUid + '/kiwis');
+        var db = new Firebase(configs.firebaseDbUrl + kiwiUid + configs.kiwisView);
         db.auth(kiwiSpecial, function(err, result) {
           if (err) {
             console.log('Login Failed. Error:', err);

@@ -32,8 +32,6 @@ jQuery.fn.getPath = function () {
         // }
         
         path = name + (path ? '>' + path : '');
-        // console.log('path: ', path);
-
         node = parent;
     }
 
@@ -41,6 +39,5 @@ jQuery.fn.getPath = function () {
         var index = $(path).index($(this));
         path += ':eq(' + index + ')';
     }
-    // console.log(path);
     return path;
 };
