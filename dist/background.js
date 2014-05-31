@@ -38,18 +38,14 @@ param  {[type]} message [message to be pushed to the db]
   };
 
   logIn = function() {
-    var h, left, top, w;
+    var h, w;
     w = 440;
     h = 220;
-    left = (screen.width / 2) - (w / 2);
-    top = (screen.height / 2) - (h / 2);
     chrome.windows.create({
       url: configs.url + configs.chromeLoginView,
       type: "popup",
       width: w,
-      height: h,
-      left: left,
-      top: top
+      height: h
     }, function(window) {});
   };
 

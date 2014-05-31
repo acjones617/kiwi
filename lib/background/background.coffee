@@ -6,8 +6,8 @@ initBackground = ->
   chrome.browserAction.onClicked.addListener (tab) ->
     isLoggedIn logIn, pushKiwi, tab
     return
-
   return
+
 isLoggedIn = (login, addKiwi, tab) ->
   chrome.cookies.get
     url: configs.url + configs.chromeLoginView
@@ -18,21 +18,16 @@ isLoggedIn = (login, addKiwi, tab) ->
     else
       login()
     return
-
   return
 
 logIn = ->
   w = 440
   h = 220
-  left = (screen.width / 2) - (w / 2)
-  top = (screen.height / 2) - (h / 2)
   chrome.windows.create
     url: configs.url + configs.chromeLoginView
     type: "popup"
     width: w
     height: h
-    left: left
-    top: top
   , (window) ->
 
   return

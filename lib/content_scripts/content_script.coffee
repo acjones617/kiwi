@@ -1,7 +1,12 @@
 jQuery.fn.getTitle = ->
   $("html").find("title").text()
 
+jQuery.fn.removeAttrIfEmpty = ->
+  if($(@).attr('class') is '')
+    $(@).removeAttr('class')
+
 notifyUser = (message) ->
+  $('.__kiwiSuccess').remove()
   $("body").prepend """
       <div class='__kiwiSuccess'
            style='background-color: #FAFF9A;
@@ -15,7 +20,6 @@ notifyUser = (message) ->
                   margin: 10px 12px;'>
                   #{message}</div>
                   """
-  # $(".__kiwiSuccess").fadeOut "slow"
   $(".__kiwiSuccess").delay(configs.displayDelay).fadeTo 5000, 0, ->
     $(@).remove()
   $(".__kiwiSuccess").on(
@@ -43,6 +47,25 @@ getTodayInString = ->
   today = new Date()
   today.getFullYear() + "-" + today.getMonth() + "-" + today.getDate()
 
+isTooDeep = (node, levels, count = 0) ->
+  if(count > levels)
+    return true
+  else
+    children = $(node).children()
+    if(children.length > 3)
+      return true
+    if(children.length)
+      i = 0
+      while i < children.length
+        i++
+        return isTooDeep($(node).children()[i], levels, count++)
+    return false
+
+
+isValidNode = (node) ->
+  nonos = ['img', 'button', 'input']
+  return !_.contains(nonos, node.localName) # && !isTooDeep(node, 3)
+
 chrome.runtime.onMessage.addListener (request, sender, sendResponse) ->
   triggered = false
   notifyUser "Please select an element with numeric values for tracking."
@@ -53,16 +76,16 @@ chrome.runtime.onMessage.addListener (request, sender, sendResponse) ->
     return
 
   clickHandler = (event) ->
+    do event.preventDefault
     unless triggered
       triggered = true
       $(".__kiwi").removeClass "__kiwi"
       event.preventDefault()
       selectedText = $(event.target).text()
+      selectedElement = $(@)
       $el = $(event.target)
-      if selectedText isnt ""
+      if selectedText isnt "" and isValidNode(@)
         chrome.storage.sync.get "__kiwi", (result) ->
-          
-          # email: result.__kiwi,
           response =
             title: $el.getTitle()
             path: $el.getPath()
@@ -71,8 +94,6 @@ chrome.runtime.onMessage.addListener (request, sender, sendResponse) ->
               date: getTodayInString()
               value: selectedText
             ]
-
-          
           # remove the 'mouseenter' handler from all nodes so
           # that no new nodes can be selected after user clicks one
           $("*").off "mouseenter", mouseEnterHandler
@@ -81,12 +102,14 @@ chrome.runtime.onMessage.addListener (request, sender, sendResponse) ->
           return
 
       else
+        triggered = false
         notifyUser "Please select an element with a trackable value."
     return
 
   mouseLeaveHandler = (event) ->
     $(".__kiwi").off "click"
     $(event.target).removeClass "__kiwi"
+    $(event.target).removeAttrIfEmpty()
     return
 
   if request.createKiwi

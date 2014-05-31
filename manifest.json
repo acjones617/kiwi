@@ -39,7 +39,7 @@
         "http://*/*",
         "https://*/*"
       ],
-      "all_frames": true,
+      "all_frames": false,
       "js": [
         "bower_components/jquery/dist/jquery.js",
         "bower_components/underscore/underscore.js",
