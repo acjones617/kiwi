@@ -15,6 +15,7 @@ notifyUser = (message) ->
                   color: black;
                   font-family: Helvetica;
                   height: 40px;
+                  font-size: 14px;
                   width: 96%;
                   padding: 10px 10px;
                   margin: 10px 12px;'>
