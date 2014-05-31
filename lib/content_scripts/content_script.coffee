@@ -6,7 +6,7 @@ notifyUser = (message) ->
       <div class='__kiwiSuccess'
            style='background-color: #FAFF9A;
                   position: fixed;
-                  z-index: 1000;
+                  z-index: 9000;
                   color: black;
                   font-family: Helvetica;
                   height: 40px;

@@ -54,7 +54,7 @@
   };
 
   notifyUser = function(message) {
-    $("body").prepend("<div class='__kiwiSuccess'\n     style='background-color: #FAFF9A;\n            position: fixed;\n            z-index: 1000;\n            color: black;\n            font-family: Helvetica;\n            height: 40px;\n            width: 96%;\n            padding: 10px 10px;\n            margin: 10px 12px;'>\n            " + message + "</div>");
+    $("body").prepend("<div class='__kiwiSuccess'\n     style='background-color: #FAFF9A;\n            position: fixed;\n            z-index: 9000;\n            color: black;\n            font-family: Helvetica;\n            height: 40px;\n            width: 96%;\n            padding: 10px 10px;\n            margin: 10px 12px;'>\n            " + message + "</div>");
     setTimeout((function() {
       $(".__kiwiSuccess").fadeOut("slow");
     }), configs.displayDelay);
