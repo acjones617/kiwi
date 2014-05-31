@@ -9,7 +9,7 @@ notifyUser = (message) ->
                   z-index: 1000;
                   color: black;
                   font-family: Helvetica;
-                  height: 19px;
+                  height: 40px;
                   width: 96%;
                   padding: 10px 10px;
                   margin: 10px 12px;'>
@@ -71,11 +71,11 @@ chrome.runtime.onMessage.addListener (request, sender, sendResponse) ->
           # that no new nodes can be selected after user clicks one
           $("*").off "mouseenter", mouseEnterHandler
           sendResponse response
-          notifyUser "Your item has been added for tracking. Check them out <a href='#{configs.url/configs.kiwisView}>here</a>"
+          notifyUser "Your item has been added for tracking. Check them out <a href='#{configs.url}/#{configs.kiwisView}'>here</a>"
           return
 
       else
-        notifyUser "Please selected an element with a trackable value."
+        notifyUser "Please select an element with a trackable value."
     return
 
   mouseLeaveHandler = (event) ->
