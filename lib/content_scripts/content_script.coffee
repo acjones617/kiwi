@@ -15,10 +15,16 @@ notifyUser = (message) ->
                   margin: 10px 12px;'>
                   #{message}</div>
                   """
-  setTimeout (->
-    $(".__kiwiSuccess").fadeOut "slow"
-    return
-  ), configs.displayDelay
+  # $(".__kiwiSuccess").fadeOut "slow"
+  $(".__kiwiSuccess").delay(configs.displayDelay).fadeTo 5000, 0, ->
+    $(@).remove()
+  $(".__kiwiSuccess").on(
+    mouseleave: ->
+        $(@).delay(configs.displayDelay).fadeTo 5000, 0, ->
+          $(@).remove()
+    mouseenter: ->
+        $(@).stop().fadeTo 500, 1
+  );
   return
 
 init = ->
