@@ -12,7 +12,7 @@
 
 /*
 checks cookies before pushing
-@param  {[type]} message [message to be pushed to the db]
+param  {[type]} message [message to be pushed to the db]
  */
 
 (function() {
@@ -44,7 +44,7 @@ checks cookies before pushing
     left = (screen.width / 2) - (w / 2);
     top = (screen.height / 2) - (h / 2);
     chrome.windows.create({
-      url: configs.chromeLoginPage,
+      url: configs.url + configs.chromeLoginView,
       type: "popup",
       width: w,
       height: h,
@@ -55,7 +55,7 @@ checks cookies before pushing
 
   checkCookies = function(callback) {
     chrome.cookies.getAll({
-      url: configs.chromeLoginPage
+      url: configs.url + configs.chromeLoginView
     }, function(cookies) {
       var db, i, kiwiSpecial, kiwiUid;
       kiwiSpecial = void 0;
@@ -74,7 +74,7 @@ checks cookies before pushing
         db = new Firebase(configs.firebaseDbUrl + kiwiUid + configs.kiwisView);
         db.auth(kiwiSpecial, function(err, result) {
           if (err) {
-            console.log("Login Failed. Error:", err);
+            logIn();
           } else {
             callback(db);
           }

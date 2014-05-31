@@ -1,4 +1,3 @@
-
 ###
 checks cookies before pushing
 param  {[type]} message [message to be pushed to the db]
@@ -28,7 +27,7 @@ logIn = ->
   left = (screen.width / 2) - (w / 2)
   top = (screen.height / 2) - (h / 2)
   chrome.windows.create
-    url: configs.chromeLoginPage
+    url: configs.url + configs.chromeLoginView
     type: "popup"
     width: w
     height: h
@@ -40,12 +39,11 @@ logIn = ->
 
 checkCookies = (callback) ->
   chrome.cookies.getAll
-    url: configs.chromeLoginPage
+    url: configs.url + configs.chromeLoginView
   , (cookies) ->
     kiwiSpecial = undefined
     kiwiUid = undefined
     i = 0
-
     while i < cookies.length
       kiwiSpecial = cookies[i].value  if cookies[i].name is "kiwiSpecial"
       kiwiUid = cookies[i].value  if cookies[i].name is "kiwiUid"
@@ -54,7 +52,7 @@ checkCookies = (callback) ->
       db = new Firebase(configs.firebaseDbUrl + kiwiUid + configs.kiwisView)
       db.auth kiwiSpecial, (err, result) ->
         if err
-          do login
+          do logIn
         else
           callback db
         return

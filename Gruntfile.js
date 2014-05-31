@@ -44,7 +44,7 @@ module.exports = function(grunt) {
       }
     },
     watch: {
-      files: ['*'],
+      files: ['lib/*/*'],
       tasks: ['coffee']
     }
   });
