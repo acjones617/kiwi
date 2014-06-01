@@ -46,7 +46,7 @@ init = ->
 
 getTodayInString = ->
   today = new Date()
-  today.getFullYear() + "-" + today.getMonth() + "-" + today.getDate()
+  return today.toString()
 
 isTooDeep = (node, levels, count = 0) ->
   if(count > levels)

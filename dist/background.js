@@ -4,7 +4,7 @@
     chromeLoginView: "/special",
     firebaseDbUrl: "https://kiwidb.firebaseio.com/users/",
     kiwisView: "/kiwis",
-    displayDelay: 3000
+    displayDelay: 2000
   };
 
 }).call(this);

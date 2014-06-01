@@ -4,7 +4,7 @@
     chromeLoginView: "/special",
     firebaseDbUrl: "https://kiwidb.firebaseio.com/users/",
     kiwisView: "/kiwis",
-    displayDelay: 3000
+    displayDelay: 2000
   };
 
 }).call(this);
@@ -94,7 +94,7 @@
   getTodayInString = function() {
     var today;
     today = new Date();
-    return today.getFullYear() + "-" + today.getMonth() + "-" + today.getDate();
+    return today.toString();
   };
 
   isTooDeep = function(node, levels, count) {
