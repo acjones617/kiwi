@@ -62,10 +62,13 @@ isTooDeep = (node, levels, count = 0) ->
         return isTooDeep($(node).children()[i], levels, count++)
     return false
 
+isTooLong = (node) ->
+  text = $(node).text().trim() #parse whitespaces
+  text.length > 256 #check length
 
 isValidNode = (node) ->
   nonos = ['img', 'button', 'input']
-  return !_.contains(nonos, node.localName) # && !isTooDeep(node, 3)
+  return !_.contains(nonos, node.localName) &&  !isTooLong node # && !isTooDeep(node, 3)
 
 chrome.runtime.onMessage.addListener (request, sender, sendResponse) ->
   triggered = false
@@ -104,7 +107,7 @@ chrome.runtime.onMessage.addListener (request, sender, sendResponse) ->
 
       else
         triggered = false
-        notifyUser "Please select an element with a trackable value."
+        notifyUser "Please select an element with a trackable value or hit Esc to cancel. Elements cannot be images, buttons or inputs, and must be less than 256 characters long."
     return
 
   mouseLeaveHandler = (event) ->
