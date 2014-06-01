@@ -85,7 +85,7 @@ chrome.runtime.onMessage.addListener (request, sender, sendResponse) ->
       triggered = true
       $(".__kiwi").removeClass "__kiwi"
       event.preventDefault()
-      selectedText = $(event.target).text()
+      selectedText = $(event.target).text().trim()
       selectedElement = $(@)
       $el = $(event.target)
       if selectedText isnt "" and isValidNode(@)
