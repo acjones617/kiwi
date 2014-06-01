@@ -48,27 +48,13 @@ getTodayInString = ->
   today = new Date()
   return today.toString()
 
-isTooDeep = (node, levels, count = 0) ->
-  if(count > levels)
-    return true
-  else
-    children = $(node).children()
-    if(children.length > 3)
-      return true
-    if(children.length)
-      i = 0
-      while i < children.length
-        i++
-        return isTooDeep($(node).children()[i], levels, count++)
-    return false
-
 isTooLong = (node) ->
   text = $(node).text().trim() #parse whitespaces
   text.length > 256 #check length
 
 isValidNode = (node) ->
   nonos = ['img', 'button', 'input']
-  return !_.contains(nonos, node.localName) &&  !isTooLong node # && !isTooDeep(node, 3)
+  return !_.contains(nonos, node.localName) &&  !isTooLong node
 
 chrome.runtime.onMessage.addListener (request, sender, sendResponse) ->
   triggered = false
