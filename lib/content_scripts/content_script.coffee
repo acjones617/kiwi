@@ -80,6 +80,7 @@ chrome.runtime.onMessage.addListener (request, sender, sendResponse) ->
             title: $el.getTitle()
             path: $el.getPath()
             url: window.location.href
+            priority: 'a'
             values: [
               date: getTodayInString()
               value: selectedText
