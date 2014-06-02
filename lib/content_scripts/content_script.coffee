@@ -113,6 +113,9 @@ chrome.runtime.onMessage.addListener (request, sender, sendResponse) ->
         $(".__kiwi").removeClass "__kiwi"
         $("*").off "mouseenter", mouseEnterHandler
         $("*").off "click", clickHandler
+
+        #and close firebase connection
+        sendResponse {cancelled: true}
       return
 
     return true
