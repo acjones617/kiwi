@@ -2,6 +2,7 @@
 checks cookies before pushing
 param  {[type]} message [message to be pushed to the db]
 ###
+
 initBackground = ->
   chrome.browserAction.onClicked.addListener (tab) ->
     isLoggedIn logIn, pushKiwi, tab
@@ -61,9 +62,11 @@ pushKiwi = (tab) ->
     chrome.tabs.sendMessage tab.id,
       createKiwi: true
     , (response) ->
+      return Firebase.goOffline() if response.cancelled #close connection
       console.log "Right before sending to DB: ", response
       console.log "Sending to DB:"
       db.push response
+      Firebase.goOffline()
       return
 
     return
