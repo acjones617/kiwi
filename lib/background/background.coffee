@@ -46,6 +46,7 @@ checkCookies = (callback) ->
       i++
     if kiwiUid
       db = new Firebase(configs.firebaseDbUrl + kiwiUid + configs.kiwisView)
+      Firebase.goOnline()
       db.auth kiwiSpecial, (err, result) ->
         if err
           do logIn
