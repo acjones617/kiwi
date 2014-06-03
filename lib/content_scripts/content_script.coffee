@@ -21,7 +21,7 @@ notifyUser = (message) ->
                   margin: 10px 12px;'>
                   #{message}</div>
                   """
-  $(".__kiwiSuccess").delay(configs.displayDelay).fadeTo 2000, 0, ->
+  $(".__kiwiSuccess").delay(configs.displayDelay).fadeTo 4000, 0, ->
     $(@).remove()
   $(".__kiwiSuccess").on(
     mouseleave: ->
@@ -120,6 +120,10 @@ chrome.runtime.onMessage.addListener (request, sender, sendResponse) ->
       return
 
     return true
+
+   if request.alertUser
+     notifyUser "You have reached your limit of kiwis, you are alowed to have " + configs.kiwiLimit + ", please <a href='#{configs.url}/#{configs.kiwisView}'>delete</a> a few."
+
   true
 
 init()

@@ -4,3 +4,4 @@ window.configs =
   firebaseDbUrl: "https://kiwidb.firebaseio.com/users/"
   kiwisView: "/kiwis"
   displayDelay: 2000
+  kiwiLimit: 15

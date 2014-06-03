@@ -4,7 +4,8 @@
     chromeLoginView: "/special",
     firebaseDbUrl: "https://kiwidb.firebaseio.com/users/",
     kiwisView: "/kiwis",
-    displayDelay: 2000
+    displayDelay: 2000,
+    kiwiLimit: 15
   };
 
 }).call(this);
@@ -16,7 +17,7 @@ param  {[type]} message [message to be pushed to the db]
  */
 
 (function() {
-  var checkCookies, initBackground, isLoggedIn, logIn, numberOfKiwis, pushKiwi;
+  var checkCookies, initBackground, isLoggedIn, logIn, pushKiwi;
 
   initBackground = function() {
     chrome.browserAction.onClicked.addListener(function(tab) {
@@ -49,7 +50,7 @@ param  {[type]} message [message to be pushed to the db]
     }, function(window) {});
   };
 
-  checkCookies = function(callback) {
+  checkCookies = function(tab, callback) {
     chrome.cookies.getAll({
       url: configs.url + configs.chromeLoginView
     }, function(cookies) {
@@ -70,23 +71,32 @@ param  {[type]} message [message to be pushed to the db]
         db = new Firebase(configs.firebaseDbUrl + kiwiUid + configs.kiwisView);
         Firebase.goOnline();
         db.auth(kiwiSpecial, function(err, result) {
+          var arr;
           if (err) {
             logIn();
           } else {
-            callback(db);
+            arr = [];
+            db.once("value", function(snapshot) {
+              var key;
+              for (key in snapshot.val()) {
+                arr.push(key);
+              }
+              if (arr.length >= configs.kiwiLimit) {
+                return chrome.tabs.sendMessage(tab.id, {
+                  alertUser: true
+                });
+              } else {
+                return callback(db);
+              }
+            });
           }
         });
       }
     });
   };
 
-  numberOfKiwis = function(db) {
-    db = new Firebase(configs.firebaseDbUrl);
-    return console.log(db.val());
-  };
-
   pushKiwi = function(tab) {
-    checkCookies(function(db) {
+    checkCookies(tab, function(db) {
       chrome.tabs.sendMessage(tab.id, {
         createKiwi: true
       }, function(response) {

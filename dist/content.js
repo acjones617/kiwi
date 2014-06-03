@@ -4,7 +4,8 @@
     chromeLoginView: "/special",
     firebaseDbUrl: "https://kiwidb.firebaseio.com/users/",
     kiwisView: "/kiwis",
-    displayDelay: 2000
+    displayDelay: 2000,
+    kiwiLimit: 15
   };
 
 }).call(this);
@@ -62,7 +63,7 @@
   notifyUser = function(message) {
     $('.__kiwiSuccess').remove();
     $("body").prepend("<div class='__kiwiSuccess'\n     style='background-color: #FAFF9A;\n            position: fixed;\n            z-index: 1000000000;\n            color: black;\n            font-family: Helvetica;\n            height: 40px;\n            font-size: 14px;\n            width: 96%;\n            padding: 10px 10px;\n            margin: 10px 12px;'>\n            " + message + "</div>");
-    $(".__kiwiSuccess").delay(configs.displayDelay).fadeTo(2000, 0, function() {
+    $(".__kiwiSuccess").delay(configs.displayDelay).fadeTo(4000, 0, function() {
       return $(this).remove();
     });
     $(".__kiwiSuccess").on({
@@ -172,6 +173,9 @@
         }
       });
       return true;
+    }
+    if (request.alertUser) {
+      notifyUser("You have reached your limit of kiwis, you are alowed to have " + configs.kiwiLimit + (", please <a href='" + configs.url + "/" + configs.kiwisView + "'>delete</a> a few."));
     }
     return true;
   });
