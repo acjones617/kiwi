@@ -16,7 +16,7 @@ param  {[type]} message [message to be pushed to the db]
  */
 
 (function() {
-  var checkCookies, initBackground, isLoggedIn, logIn, pushKiwi;
+  var checkCookies, initBackground, isLoggedIn, logIn, numberOfKiwis, pushKiwi;
 
   initBackground = function() {
     chrome.browserAction.onClicked.addListener(function(tab) {
@@ -68,6 +68,7 @@ param  {[type]} message [message to be pushed to the db]
       }
       if (kiwiUid) {
         db = new Firebase(configs.firebaseDbUrl + kiwiUid + configs.kiwisView);
+        Firebase.goOnline();
         db.auth(kiwiSpecial, function(err, result) {
           if (err) {
             logIn();
@@ -79,14 +80,24 @@ param  {[type]} message [message to be pushed to the db]
     });
   };
 
+  numberOfKiwis = function(db) {
+    db = new Firebase(configs.firebaseDbUrl);
+    return console.log(db.val());
+  };
+
   pushKiwi = function(tab) {
     checkCookies(function(db) {
       chrome.tabs.sendMessage(tab.id, {
         createKiwi: true
       }, function(response) {
+        if (response.canceled) {
+          return Firebase.goOffline();
+        }
         console.log("Right before sending to DB: ", response);
         console.log("Sending to DB:");
         db.push(response);
+        console.log(response, "response");
+        Firebase.goOffline();
       });
     });
   };

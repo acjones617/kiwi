@@ -11,7 +11,7 @@ notifyUser = (message) ->
       <div class='__kiwiSuccess'
            style='background-color: #FAFF9A;
                   position: fixed;
-                  z-index: 9000;
+                  z-index: 1000000000;
                   color: black;
                   font-family: Helvetica;
                   height: 40px;
@@ -21,11 +21,11 @@ notifyUser = (message) ->
                   margin: 10px 12px;'>
                   #{message}</div>
                   """
-  $(".__kiwiSuccess").delay(configs.displayDelay).fadeTo 5000, 0, ->
+  $(".__kiwiSuccess").delay(configs.displayDelay).fadeTo 2000, 0, ->
     $(@).remove()
   $(".__kiwiSuccess").on(
     mouseleave: ->
-        $(@).delay(configs.displayDelay).fadeTo 5000, 0, ->
+        $(@).delay(configs.displayDelay).fadeTo 4000, 0, ->
           $(@).remove()
     mouseenter: ->
         $(@).stop().fadeTo 500, 1

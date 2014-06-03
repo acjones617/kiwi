@@ -90,6 +90,9 @@ function storeRules() {
 
 window.onload = function() {
   loadRules();
+  document.getElementById('logOut').onclick = function() {
+    console.log("you have been logged out")
+  }
   document.getElementById('setEmail').onclick = function() {
     // debugger;
     // localStorage.setItem('__kiwiEmail', document.getElementById('email').value);
