@@ -4,7 +4,8 @@
     chromeLoginView: "/special",
     firebaseDbUrl: "https://kiwidb.firebaseio.com/users/",
     kiwisView: "/kiwis",
-    displayDelay: 2000
+    displayDelay: 2000,
+    kiwiLimit: 15
   };
 
 }).call(this);
@@ -49,7 +50,7 @@ param  {[type]} message [message to be pushed to the db]
     }, function(window) {});
   };
 
-  checkCookies = function(callback) {
+  checkCookies = function(tab, callback) {
     chrome.cookies.getAll({
       url: configs.url + configs.chromeLoginView
     }, function(cookies) {
@@ -68,11 +69,26 @@ param  {[type]} message [message to be pushed to the db]
       }
       if (kiwiUid) {
         db = new Firebase(configs.firebaseDbUrl + kiwiUid + configs.kiwisView);
+        Firebase.goOnline();
         db.auth(kiwiSpecial, function(err, result) {
+          var arr;
           if (err) {
             logIn();
           } else {
-            callback(db);
+            arr = [];
+            db.once("value", function(snapshot) {
+              var key;
+              for (key in snapshot.val()) {
+                arr.push(key);
+              }
+              if (arr.length >= configs.kiwiLimit) {
+                return chrome.tabs.sendMessage(tab.id, {
+                  alertUser: true
+                });
+              } else {
+                return callback(db);
+              }
+            });
           }
         });
       }
@@ -80,13 +96,18 @@ param  {[type]} message [message to be pushed to the db]
   };
 
   pushKiwi = function(tab) {
-    checkCookies(function(db) {
+    checkCookies(tab, function(db) {
       chrome.tabs.sendMessage(tab.id, {
         createKiwi: true
       }, function(response) {
+        if (response.canceled) {
+          return Firebase.goOffline();
+        }
         console.log("Right before sending to DB: ", response);
         console.log("Sending to DB:");
         db.push(response);
+        console.log(response, "response");
+        Firebase.goOffline();
       });
     });
   };

@@ -8,15 +8,15 @@ initBackground = ->
     isLoggedIn logIn, pushKiwi, tab
     return
   return
-
 isLoggedIn = (login, addKiwi, tab) ->
   chrome.cookies.get
     url: configs.url + configs.chromeLoginView
     name: "kiwiSpecial"
   , (cookie) ->
-    if cookie
+    if cookie 
       addKiwi tab
     else
+    
       login()
     return
   return
@@ -33,14 +33,14 @@ logIn = ->
 
   return
 
-checkCookies = (callback) ->
-  chrome.cookies.getAll
+checkCookies = (tab, callback) ->
+  chrome.cookies.getAll 
     url: configs.url + configs.chromeLoginView
   , (cookies) ->
     kiwiSpecial = undefined
     kiwiUid = undefined
     i = 0
-    while i < cookies.length
+    while i < cookies.length 
       kiwiSpecial = cookies[i].value  if cookies[i].name is "kiwiSpecial"
       kiwiUid = cookies[i].value  if cookies[i].name is "kiwiUid"
       i++
@@ -50,8 +50,17 @@ checkCookies = (callback) ->
       db.auth kiwiSpecial, (err, result) ->
         if err
           do logIn
-        else
-          callback db
+        else 
+          arr = []
+          db.once "value", (snapshot) ->
+
+            for key of snapshot.val()
+              arr.push key
+            if arr.length >= configs.kiwiLimit
+              chrome.tabs.sendMessage tab.id,
+                alertUser: true
+            else 
+              callback db
         return
 
     return
@@ -59,14 +68,15 @@ checkCookies = (callback) ->
   return
 
 pushKiwi = (tab) ->
-  checkCookies (db) ->
+  checkCookies tab, (db) ->
     chrome.tabs.sendMessage tab.id,
       createKiwi: true
     , (response) ->
-      return Firebase.goOffline() if response.cancelled #close connection
+      return Firebase.goOffline() if response.canceled #close connection
       console.log "Right before sending to DB: ", response
       console.log "Sending to DB:"
       db.push response
+      console.log response, "response"
       Firebase.goOffline()
       return
 

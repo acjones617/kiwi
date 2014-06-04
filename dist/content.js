@@ -4,7 +4,8 @@
     chromeLoginView: "/special",
     firebaseDbUrl: "https://kiwidb.firebaseio.com/users/",
     kiwisView: "/kiwis",
-    displayDelay: 2000
+    displayDelay: 2000,
+    kiwiLimit: 15
   };
 
 }).call(this);
@@ -47,7 +48,7 @@
 }).call(this);
 
 (function() {
-  var getTodayInString, init, isTooDeep, isValidNode, notifyUser;
+  var getTodayInString, init, isTooLong, isValidNode, notifyUser;
 
   jQuery.fn.getTitle = function() {
     return $("html").find("title").text();
@@ -61,13 +62,13 @@
 
   notifyUser = function(message) {
     $('.__kiwiSuccess').remove();
-    $("body").prepend("<div class='__kiwiSuccess'\n     style='background-color: #FAFF9A;\n            position: fixed;\n            z-index: 9000;\n            color: black;\n            font-family: Helvetica;\n            height: 40px;\n            font-size: 14px;\n            width: 96%;\n            padding: 10px 10px;\n            margin: 10px 12px;'>\n            " + message + "</div>");
-    $(".__kiwiSuccess").delay(configs.displayDelay).fadeTo(5000, 0, function() {
+    $("body").prepend("<div class='__kiwiSuccess'\n     style='background-color: #FAFF9A;\n            position: fixed;\n            z-index: 1000000000;\n            color: black;\n            font-family: Helvetica;\n            height: 40px;\n            font-size: 14px;\n            width: 96%;\n            padding: 10px 10px;\n            margin: 10px 12px;'>\n            " + message + "</div>");
+    $(".__kiwiSuccess").delay(configs.displayDelay).fadeTo(4000, 0, function() {
       return $(this).remove();
     });
     $(".__kiwiSuccess").on({
       mouseleave: function() {
-        return $(this).delay(configs.displayDelay).fadeTo(5000, 0, function() {
+        return $(this).delay(configs.displayDelay).fadeTo(4000, 0, function() {
           return $(this).remove();
         });
       },
@@ -97,33 +98,16 @@
     return today.toString();
   };
 
-  isTooDeep = function(node, levels, count) {
-    var children, i;
-    if (count == null) {
-      count = 0;
-    }
-    if (count > levels) {
-      return true;
-    } else {
-      children = $(node).children();
-      if (children.length > 3) {
-        return true;
-      }
-      if (children.length) {
-        i = 0;
-        while (i < children.length) {
-          i++;
-          return isTooDeep($(node).children()[i], levels, count++);
-        }
-      }
-      return false;
-    }
+  isTooLong = function(node) {
+    var text;
+    text = $(node).text().trim();
+    return text.length > 256;
   };
 
   isValidNode = function(node) {
     var nonos;
     nonos = ['img', 'button', 'input'];
-    return !_.contains(nonos, node.localName);
+    return !_.contains(nonos, node.localName) && !isTooLong(node);
   };
 
   chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
@@ -142,7 +126,7 @@
         triggered = true;
         $(".__kiwi").removeClass("__kiwi");
         event.preventDefault();
-        selectedText = $(event.target).text();
+        selectedText = $(event.target).text().trim();
         selectedElement = $(this);
         $el = $(event.target);
         if (selectedText !== "" && isValidNode(this)) {
@@ -152,6 +136,7 @@
               title: $el.getTitle(),
               path: $el.getPath(),
               url: window.location.href,
+              priority: 'a',
               values: [
                 {
                   date: getTodayInString(),
@@ -165,7 +150,7 @@
           });
         } else {
           triggered = false;
-          notifyUser("Please select an element with a trackable value.");
+          notifyUser("Please select an element with a trackable value or hit Esc to cancel. Elements cannot be images, buttons or inputs, and must be less than 256 characters long.");
         }
       }
     };
@@ -182,9 +167,15 @@
           $(".__kiwi").removeClass("__kiwi");
           $("*").off("mouseenter", mouseEnterHandler);
           $("*").off("click", clickHandler);
+          sendResponse({
+            cancelled: true
+          });
         }
       });
       return true;
+    }
+    if (request.alertUser) {
+      notifyUser("You have reached your limit of kiwis, you are alowed to have " + configs.kiwiLimit + (", please <a href='" + configs.url + "/" + configs.kiwisView + "'>delete</a> a few."));
     }
     return true;
   });
