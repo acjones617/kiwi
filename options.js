@@ -1,6 +1,17 @@
 // Copyright (c) 2013 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
+(function() {
+  window.configs = {
+    url: "http://localhost:9000",
+    chromeLoginView: "/special",
+    firebaseDbUrl: "https://kiwidb.firebaseio.com/users/",
+    kiwisView: "/kiwis",
+    displayDelay: 2000,
+    kiwiLimit: 15
+  };
+
+}).call(this);
 
 function Rule(data) {
   var rules = document.getElementById('rules');
@@ -90,8 +101,24 @@ function storeRules() {
 
 window.onload = function() {
   loadRules();
+  var arrCookies = [];
+  chrome.cookies.getAll({
+      url: configs.url + configs.chromeLoginView
+    }, function(cookies) { 
+      for(var i = 0; i < cookies.length; i++) {
+        console.log(cookies[i].name)
+        arrCookies.push(cookies[i].name)
+      }
+    })
   document.getElementById('logOut').onclick = function() {
-    console.log("you have been logged out")
+    //must iterate over loggin cookies
+    for(var i = 0; i < arrCookies.length; i++) {
+      chrome.cookies.remove({
+        url: configs.url + configs.chromeLoginView,
+      name: arrCookies[i]
+    })  
+    }
+    alert("you have been logged out")
   }
   document.getElementById('setEmail').onclick = function() {
     // debugger;
