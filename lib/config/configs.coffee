@@ -1,5 +1,5 @@
 window.configs =
-  url: "http://localhost:9000"
+  url: "http://kiwirunner.azurewebsites.net"
   chromeLoginView: "/special"
   firebaseDbUrl: "https://kiwidb.firebaseio.com/users/"
   kiwisView: "/kiwis"
