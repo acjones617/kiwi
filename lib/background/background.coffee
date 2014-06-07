@@ -72,12 +72,12 @@ pushKiwi = (tab) ->
     chrome.tabs.sendMessage tab.id,
       createKiwi: true
     , (response) ->
-      # return Firebase.goOffline() if response.canceled #close connection
+      return Firebase.goOffline() if response.canceled #close connection
       console.log "Right before sending to DB: ", response
       console.log "Sending to DB:"
       db.push response
       console.log response, "response"
-      # Firebase.goOffline()
+      Firebase.goOffline()
       return true
 
     return true
