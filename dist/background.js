@@ -69,7 +69,6 @@ param  {[type]} message [message to be pushed to the db]
       }
       if (kiwiUid) {
         db = new Firebase(configs.firebaseDbUrl + kiwiUid + configs.kiwisView);
-        Firebase.goOnline();
         db.auth(kiwiSpecial, function(err, result) {
           var arr;
           if (err) {
@@ -100,15 +99,13 @@ param  {[type]} message [message to be pushed to the db]
       chrome.tabs.sendMessage(tab.id, {
         createKiwi: true
       }, function(response) {
-        if (response.canceled) {
-          return Firebase.goOffline();
-        }
         console.log("Right before sending to DB: ", response);
         console.log("Sending to DB:");
         db.push(response);
         console.log(response, "response");
-        Firebase.goOffline();
+        return true;
       });
+      return true;
     });
   };
 

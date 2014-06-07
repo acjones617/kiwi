@@ -11,12 +11,10 @@ module.exports = function(grunt) {
       }
     },
     uglify: {
-      options: {
-        banner: '/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n'
-      },
       dist: {
         files: {
-          'dist/<%= pkg.name %>.min.js': ['<%= concat.dist.dest %>']
+          'dist/content.min.js': 'dist/content.js',
+          'dist/background.min.js': 'dist/background.js',
         }
       }
     },
@@ -45,7 +43,7 @@ module.exports = function(grunt) {
     },
     watch: {
       files: ['lib/*/*'],
-      tasks: ['coffee']
+      tasks: ['coffee', 'uglify']
     }
   });
 
