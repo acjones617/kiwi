@@ -168,7 +168,7 @@
           $("*").off("mouseenter", mouseEnterHandler);
           $("*").off("click", clickHandler);
           sendResponse({
-            cancelled: true
+            canceled: true
           });
         }
       });

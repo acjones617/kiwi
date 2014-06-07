@@ -116,7 +116,7 @@ chrome.runtime.onMessage.addListener (request, sender, sendResponse) ->
         $("*").off "click", clickHandler
 
         #and close firebase connection
-        # sendResponse {cancelled: true}
+        sendResponse {canceled: true}
       return
 
     return true
