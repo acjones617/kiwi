@@ -70,24 +70,10 @@ param  {[type]} message [message to be pushed to the db]
       if (kiwiUid) {
         db = new Firebase(configs.firebaseDbUrl + kiwiUid + configs.kiwisView);
         db.auth(kiwiSpecial, function(err, result) {
-          var arr;
           if (err) {
             logIn();
           } else {
-            arr = [];
-            db.once("value", function(snapshot) {
-              var key;
-              for (key in snapshot.val()) {
-                arr.push(key);
-              }
-              if (arr.length >= configs.kiwiLimit) {
-                return chrome.tabs.sendMessage(tab.id, {
-                  alertUser: true
-                });
-              } else {
-                return callback(db);
-              }
-            });
+            callback(db);
           }
         });
       }
@@ -99,18 +85,13 @@ param  {[type]} message [message to be pushed to the db]
       chrome.tabs.sendMessage(tab.id, {
         createKiwi: true
       }, function(response) {
-        if (response.canceled) {
-          return Firebase.goOffline();
-        }
-        console.log("Right before sending to DB: ", response);
-        console.log("Sending to DB:");
+        console.log("Sending to DB:", response);
         db.push(response);
-        console.log(response, "response");
-        Firebase.goOffline();
         return true;
       });
       return true;
     });
+    return true;
   };
 
   initBackground();

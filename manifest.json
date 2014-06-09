@@ -3,7 +3,7 @@
 
   "name": "Kiwi",
   "description": "Let kiwi track things for you",
-  "version": "0.1.1",
+  "version": "0.1.1.1",
 
   "browser_action": {
     "default_icon": "icon.png",
@@ -26,7 +26,7 @@
   "background": {
     "scripts": [
       "lib/firebase.js",
-      "dist/background.min.js"
+      "dist/background.js"
     ]
   },
 
@@ -43,7 +43,7 @@
       "js": [
         "lib/jquery.js",
         "lib/underscore.js",
-        "dist/content.min.js"
+        "dist/content.js"
       ]
     }
   ]

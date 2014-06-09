@@ -167,9 +167,6 @@
           $(".__kiwi").removeClass("__kiwi");
           $("*").off("mouseenter", mouseEnterHandler);
           $("*").off("click", clickHandler);
-          sendResponse({
-            canceled: true
-          });
         }
       });
       return true;

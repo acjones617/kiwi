@@ -51,16 +51,18 @@ checkCookies = (tab, callback) ->
         if err
           do logIn
         else 
-          arr = []
-          db.once "value", (snapshot) ->
+          # arr = []
+          # db.once "value", (snapshot) ->
 
-            for key of snapshot.val()
-              arr.push key
-            if arr.length >= configs.kiwiLimit
-              chrome.tabs.sendMessage tab.id,
-                alertUser: true
-            else 
-              callback db
+          #   for key of snapshot.val()
+          #     arr.push key
+          #   if arr.length >= configs.kiwiLimit
+          #     chrome.tabs.sendMessage tab.id,
+          #       alertUser: true
+          #   else 
+          #     debugger;
+          #     callback db
+          callback db
         return
 
     return
@@ -72,16 +74,14 @@ pushKiwi = (tab) ->
     chrome.tabs.sendMessage tab.id,
       createKiwi: true
     , (response) ->
-      return Firebase.goOffline() if response.canceled #close connection
-      console.log "Right before sending to DB: ", response
-      console.log "Sending to DB:"
+      # return Firebase.goOffline() if response.canceled #close connection
+      console.log "Sending to DB:", response
       db.push response
-      console.log response, "response"
-      Firebase.goOffline()
+      # Firebase.goOffline()
       return true
 
     return true
 
-  return
+  return true
 
 initBackground()
